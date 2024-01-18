@@ -1,0 +1,524 @@
+---
+title: "Housing Data Analysis"
+author: "Shreyas Sandeep Sadhale"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+The provided data gives an overall idea about the land area, type of land used, area where the land is located, type of housing, roof types used, areas of various rooms like kitchen, garage, living area, year build, house quality, mainly the sale price,etc.
+
+Installing and Importing the Libraries in the session.
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(lessR)
+```
+
+
+
+
+The data in the .csv format will be loaded in the session using read.csv() function.
+The AmesHousingData provided is saved under the object "ames".
+I will be loading only the top 25 entries of the data.
+
+```{r}
+ames<-read.csv("C:\\Users\\Admin\\OneDrive\\Desktop\\Shreyas Northeastern\\Quarter 2\\ALY 6015 Intermediate Analytics\\Week-1\\AmesHousing-3.csv")
+head(ames,25)
+```
+
+
+
+
+The summary(summary() function) of the data which will provide the mean, median, quartiles,minimum, maximum values of the data.
+
+```{r}
+summary(ames)
+
+```
+
+
+
+
+The structure str() function will help in gaining an insight about the structure of the data such as the type of classes, content in each column.
+```{r}
+str(ames)
+```
+
+
+
+
+Checking for the unique attributes under the following columns below.
+```{r}
+unique(ames$Lot.Shape)
+unique(ames$Land.Contour)
+unique(ames$Pool.Area)
+unique(ames$X3Ssn.Porch)
+unique(ames$MS.Zoning)
+unique(ames$Street)
+unique(ames$Utilities)
+unique(ames$Neighborhood)
+unique(ames$Condition.1)
+unique(ames$Condition.2)
+unique(ames$Paved.Drive)
+unique(ames$Sale.Type)
+unique(ames$Sale.Condition)
+unique(ames$Misc.Feature)
+unique(ames$Fence)
+unique(ames$Roof.Matl)
+```
+
+
+
+Subsetting the Land.Contour variable and checking for number of entries of each category of Contour.
+```{r}
+nrow(subset(ames,ames$Land.Contour=="Lvl"))
+nrow(subset(ames,ames$Land.Contour=="HLS"))
+nrow(subset(ames,ames$Land.Contour=="Bnk"))
+nrow(subset(ames,ames$Land.Contour=="Low"))
+
+```
+
+
+
+After going through the data, eliminating the following columns from the dataset by setting them as NULL.
+```{r}
+ames$Alley=NULL
+ames$Pool.QC=NULL
+ames$Pool.Area=NULL
+ames$X3Ssn.Porch=NULL
+ames$Year.Built=NULL
+ames$Year.Remod.Add=NULL
+ames$PID=NULL
+ames$MS.SubClass=NULL
+ames$MS.Zoning=NULL
+ames$Utilities=NULL
+ames$Neighborhood=NULL
+ames$Condition.1=NULL
+ames$Condition.2=NULL
+ames$Order=NULL
+ames$Functional=NULL
+ames$Garage.Cond=NULL
+ames$Screen.Porch=NULL
+ames$Enclosed.Porch=NULL
+ames$Open.Porch.SF=NULL
+ames$ï..Order=NULL
+ames$Sale.Type=NULL
+ames$Misc.Val=NULL
+ames$Yr.Sold=NULL
+ames$X1st.Flr.SF=NULL
+ames$X2nd.Flr.SF=NULL
+ames$Electrical=NULL
+ames$Exter.Cond=NULL
+ames$Bsmt.Cond=NULL
+ames$Low.Qual.Fin.SF=NULL
+ames$Bsmt.Full.Bath=NULL
+ames$Bsmt.Half.Bath=NULL
+ames$Garage.Yr.Blt=NULL
+ames$Fence=NULL
+ames$Wood.Deck.SF=NULL
+ames$Street=NULL
+ames$Roof.Matl=NULL
+```
+
+
+
+
+Different types of Building types and number of buildings of each type
+```{r}
+table(ames$Bldg.Type)
+```
+
+
+
+
+Plot 1 which shows the building types mainly like the Single Family Detached, Two-Family, Duplex, Townhouse End Unit, Townhouse Inside Unit based on count. Plotted using ggplot2() library.
+
+
+```{r}
+ggplot(ames,aes(Bldg.Type))+
+  xlab("Building Type")+
+  ylab("Count")+
+  ggtitle("Barplot on Type of Building based on Count")+
+  geom_bar(col="blue",fill="blue")
+```
+
+
+
+
+
+Plot 2 based on Shape of Lot which includes Regular, Slightly Regular, Moderately Regular, Irregular. Plotted using ggplot2() library. 
+
+```{r}
+ggplot(ames,aes(Lot.Shape))+
+  xlab("Shape of the Property")+
+  ylab("Count")+
+  ggtitle("Barplot on Shape of Lot based on Count")+
+  geom_bar(col="red",fill="red")
+```
+
+
+
+
+Plot 3 based on the Flatness of land based on different levels like Hillside, Banked, Low Depression, Flat. Plotted using ggplot2() library.
+
+```{r}
+ggplot(ames,aes(Land.Contour))+
+  xlab("Flatness of the Property")+
+  ylab("Count")+
+  ggtitle("Barplot on Land Contour based on Count")+
+  geom_bar(col="yellow",fill="yellow")
+```
+
+
+
+
+Plot 4 based on the Lot Configuration which includes Inside, Corner, Cul-de-sac, Frontage on two sides of property, Frontage on three sides of property. Plotted using ggplot2() library.
+
+```{r}
+ggplot(ames, aes(Lot.Config))+
+  xlab("Lot Configuration")+
+  ylab("Count")+
+  ggtitle("Barplot on the Lot Configuration based on Count")+
+  geom_bar(col="brown",fill="brown")
+```
+
+
+
+
+Plot 5 based on the different styles of roofs over the houses like Flat, Gable, Gambrel, Hip, Mansard, Shed. Plotted using ggplot2() library.
+
+```{r}
+ggplot(ames, aes(Roof.Style))+
+  xlab("Type of Roof")+
+  ylab("Count")+
+  ggtitle("Barplot on the Style of Roof based on Count")+
+  geom_bar(col="orange",fill="orange")
+```
+
+
+
+
+Plot 6 based on the style of the house which includes the following types: One Story, One and a half story, Two story, Two and half story, etc.
+
+```{r}
+ggplot(ames, aes(factor(House.Style)))+
+  xlab("House Style")+
+  ylab("Count")+
+  ggtitle("Barplot of the House Style based on Count")+
+  geom_bar(col="green",fill="green")
+```
+
+
+
+
+Plot 7: A scatter plot between the area of lot and the sale price of the house. The following scatter plot shows that there are certain good deals in houses wherein you get very good range of houses (area wise) at a quite less cost.
+Also there are few outliers present in the plot.
+```{r}
+ggplot(ames, aes(Lot.Area,SalePrice))+
+  xlab("Area of Plot")+
+  ylab("Sale Price")+
+  ggtitle("Scatter Plot between Plot Area V/s Sale Price")+
+  geom_point(col="blue")
+```
+
+
+
+
+
+Replacing the NULL values of the respective columns with the means of respective columns. The columns who contains NULL Values are Lot.Frontage, Mas.Vnr.Area, BsmtFin.SF.1, BsmtFin.SF.2, Bsmt.Unf.SF, Total.Bsmt.SF, Garage.Cars, Garage.Area.
+
+
+```{r}
+ames$Lot.Frontage[is.na(ames$Lot.Frontage)]<-mean(ames$Lot.Frontage, na.rm = TRUE)
+ames$Mas.Vnr.Area[is.na(ames$Mas.Vnr.Area)]<-mean(ames$Mas.Vnr.Area,na.rm=TRUE)
+ames$BsmtFin.SF.1[is.na(ames$BsmtFin.SF.1)]<-mean(ames$BsmtFin.SF.1, na.rm=TRUE)
+ames$BsmtFin.SF.2[is.na(ames$BsmtFin.SF.2)]<-mean(ames$BsmtFin.SF.2,na.rm = TRUE)
+ames$Bsmt.Unf.SF[is.na(ames$Bsmt.Unf.SF)]<-mean(ames$Bsmt.Unf.SF,na.rm=TRUE)
+ames$Total.Bsmt.SF[is.na(ames$Total.Bsmt.SF)]<-mean(ames$Total.Bsmt.SF,na.rm=TRUE)
+ames$Garage.Cars[is.na(ames$Garage.Cars)]<-mean(ames$Garage.Cars,na.rm=TRUE)
+ames$Garage.Area[is.na(ames$Garage.Area)]<-mean(ames$Garage.Area,na.rm=TRUE)
+```
+
+
+
+Re-checking the summary of the whole dataset for checking any NULL values present.
+```{r}
+summary(ames)
+```
+
+
+
+
+Using the unlist and lapply functions for checking the columns if they possess any numeric values. Indicating it with the TRUE or FALSE values.
+
+```{r}
+num<-unlist(lapply(ames, is.numeric))
+num
+```
+
+
+
+
+Extracting the columns from the ames dataset which contains the numeric values only.
+
+```{r}
+numdata<-ames[,num]
+head(numdata,25)
+```
+
+
+
+
+Plotting a boxplot of the extracted dataset of numerical data of the ames dataset.The boxplot shows the data of all the numeric variables. We can see that there are few outliers in the Area of Lot but the number of outliers are quite significant in the Sale Price variable.
+
+
+```{r}
+boxplot(numdata,main="Boxplot of the Numerical Data", las=2)
+```
+
+
+
+
+Importing the library corrplot() for creating a plot of the correlation matrix.
+```{r}
+library(corrplot)
+```
+
+
+
+
+Using the cor() function to find the correlation between the variables and rounding it to the nearest two decimal places. The data is getting stored into cor object.
+
+```{r}
+cor<-round(cor(numdata),2)
+cor
+```
+
+
+
+
+From the correlation matrix we can see the hightest correlation matrix can be seen between the Gr.Liv.Area and Total Rooms AboveGrd which has a correlation of 0.81
+
+
+
+Now, using the corrplot() function to producing a plot of correlation matrix. 
+The plot will be denoted by numbers and will be showing only the lower half of the matrix as the upper half will be same as lower.
+```{r}
+cor_plot<-corrplot(cor(numdata),method = "number", type="lower")
+```
+
+
+
+The above correlation matrix goes from +1 to -1 wherein +1 is denoted in Dark Blue color and has the highest correlation and the least correlation is denoted in brown color which is -1.
+
+Now, with respect to the Sale Price, the highest correlation is there between the Overall quality and the Sale Price. They constitute a correlation of 0.80.
+Below is the scatter plot of the same Overall Quality and the Sale Price denoted in red color.
+You can conclude from the graph that the quality of the houses goes on increasing from the scale of 0 to 10 as the sale price increases. There are very less houses which offer a good quality at a moderate rate.
+```{r}
+scatter1<- ggplot(numdata,aes(Overall.Qual,SalePrice,))+
+  xlab("Overall Quality")+
+  ylab("Sale Price")+
+  ggtitle("Scatter Plot with Highest Correlation Coefficient Sale Price V/s Overall Quality")+
+  geom_point(col="red")
+scatter1
+
+```
+
+
+
+
+Now, from the correlation matrix above, with respect to the Sale Price, the one who has the lease correlation with Sale Price is the Kitchen Abv Gr. The correlation between them is -0.12
+
+The scatter plot below has been plotted between the same variables. You can see that the 1 Kitchen Abv Grd is commonly preffered at all the price points of the house.
+```{r}
+scatter2<-ggplot(numdata, aes(Kitchen.AbvGr,SalePrice))+
+  xlab("Kithen Above Grd.")+
+  ylab("Sale Price")+
+  ggtitle("Scatter Plot with least correlation Kitchen Above Grd. V/s Sale Price")+
+  geom_point(col="blue")
+scatter2
+```
+
+
+
+
+The third correlation with respect to the sale price which has a correlation nearest to 0.5. Fireplace and Sale Price has a correlation of 0.47 which is much closer to 0.50.
+
+The scatter plot below depicts the same relation between the Fireplace and the Sale Price.
+Now, it can be inferred that 1 and 2 fireplaces are commonly preffered and have akmost equal amount of distribution among the different sale prices.
+```{r}
+scatter3<-ggplot(numdata,aes(Fireplaces,SalePrice))+
+  xlab("Fire Places")+
+  ylab("Sale Price")+
+  ggtitle("Scatter Plot with correlation almost near 0.5 Fire Place V/s Sale Price")+
+  geom_point()
+scatter3
+```
+
+
+
+
+For doinf the regression, we will use the dependent variable Sale Price and the independent variables Total Bsmt.SF, Garage Area and Gr.Liv. Area.
+Using the linear model(lm()) function, we state the regression.
+```{r}
+regression1<-lm(formula=SalePrice ~ Total.Bsmt.SF + Garage.Area+ Gr.Liv.Area, data=numdata)
+regression1
+```
+
+
+
+
+The regression output gives the intercept of -29593.64
+
+
+```{r}
+summary(regression1)
+```
+
+
+
+
+After going through the summary of the above regression model, we get the Intercept value of -29593.64, Slope of 54.586, 105.145, 68.862. Multiple R-squared value of 0.6795 which is about 67.95%, adjusted r-squared value of 0.6791 which is about 67.91% and a negligible p-value of less than 0.05.
+
+Checking the correlation between the Total Bsmt.SF and Garage Area variable we get it as 0.485 which means the correlation is partially good between these two variables.
+```{r}
+cor(ames$Total.Bsmt.SF,ames$Garage.Area)
+```
+
+
+
+
+Now, importing the car library in our session for further analysis.
+```{r}
+library(car)
+```
+
+
+
+
+Plotting the four graphs Residuals vs Fitted, Normal Q-Q plot, Scale-Location, Residuals vs Leverage.
+1. Residual Vs Fitted: It is one of the frequently plotted graphs and it has residuals on Y-axis and the fitted values on the X-axis. It is usually used for checking if it contains any unequal variances, outliers, etc. Seen here in the Residuals Vs Fitted graph,there are certain outliers present.
+2. Normal Q-Q Plot: This graph is used for plotting the randomly generated, standard data,etc. The data is distributed linearly which eventually claims that the data is normally distributed. 
+In the graph below you can see the data is well linearly distributed.
+3. Scale-Location: This type of graph is used for checking the homoscedasticity. Whether the residuals are distributed along it. 
+Usually it is considered good if we see the horizontal line and the residuals spread along it. But in our graph, the line seems to be not in a horizontal line but the residuals seem to be pretty well distributed,
+4. Residuals vs Leverage: This graph is used for identify if there are any influential data points included in the data. Outliers can be considered as influential data points.
+```{r}
+par(mfrow=c(2,2))
+plot(regression1)
+```
+
+
+
+
+
+
+```{r}
+influencePlot(regression1)
+```
+The above plot is a normal scatterplot of residuals which is usually plotted to check the heteroscedasticity visually in form of graph. Also, here each point is scaled to the Cook's D Statistic which thus permits the most influential residual position.
+
+
+
+
+So, for checking the multicollinearity in our regression model, we will use vif() function which stands for Variation Inflation Factors. This helps in finding out the strength of correlation among the independent variables in a regression model.
+
+```{r}
+vif(regression1)
+```
+
+
+
+
+So, from above output, we conclude that the multicollinearity in the regression model is absent. It is considered if the values exceeed 5 or 10, then multicollinearity exists among the independent variables.
+
+Now, carrying out an OutlierTest for out regression model is also necessary.
+We will be using the OutlierTest() function for carrying out the test. This test will help in detecting the outliers in our model. It conducts the Bonferroni test for detecting. If we get the output as NULL, then there are no outliers in our model.
+```{r}
+outlierTest(model=regression1)
+```
+
+
+
+
+After carrying out the test, we find out that there are 10 outliers in our regression model. Outliers often has positive or negative impacts on our data.
+```{r}
+library(leaps)
+```
+
+
+
+
+Issues which I found in the regression model were in Scale-Location graph where in there should be a horizontal line and the residuals should be spread around it. The issue herre is that we do not have a horizontal line. The line is positively inclined.
+The second issue is with the outliers. As mentioned earlier, outliers have both positive or negative impacts on the regression model. But I am not removing it as it is not affecting the data. Also, for producing a best fitting model or statistically significant model, outliers should not be always removed.
+
+Now, moving on towards the further part of our analysis, wherein we have to choose the best model using all subsets  regression.
+
+Firstly importing the leaps library in our session which will bring in functions to do regression subsets.
+Inputting our regression model under regsubsets() function and plotting it,
+```{r}
+reg_leaps<-regsubsets(SalePrice ~ Total.Bsmt.SF + Garage.Area+ Gr.Liv.Area,data=numdata)
+```
+
+```{r}
+summary(reg_leaps)
+```
+
+
+
+
+We get the following:
+It is scaled on the bases of adjusted r-squared value of the model. Adjusted R-squared value is taken into consideration as it provides a precise view of the correlation and also taking in account other factors of independent variables.
+
+```{r}
+plot(reg_leaps, scale="adjr2")
+```
+
+
+
+
+Considering the above graph, which is based on adjr2, the one with adjr2 value 0.5 has only Intercept and Gr.Liv.Area. considered in the model, the one with adjr2 value 0.63 hs Intercept, Total Bsmt.SF and Gr.Liv.Area considered in the model having Garage Area left out and the one with adjr2 value 0.68, has all the variables considered in the model. So, it is the best regression model to be considered.
+
+For re-confirming the best model, we run the same test scaled on the basis of Cp value  which is the Mallow's Criterion. So, it is considered that the one with the less Cp value is considered to be the best regression model. So in the output below, 4 is the lowest Cp seen and it also has considered all the parameters. We again come to the same conclusion that the one with adjacent R-squared value 0.68 and Cp value of 4 is the best regression model.
+```{r}
+plot(reg_leaps, scale="Cp")
+```
+
+
+
+
+Now, coming to the final conclusion of the analysis, which model fits better. So, the one we chose as the best fit regression model had an adjusted r-squared value of 0.68 also, when we did the regression, the adjusted R-squared value we got was 0.6791 which is almost equivalent to 0.68. So, both the models are almost similar to each other. I will go with final regression model which we found out using the adjr2. 
+
+
+
+
+
+
+
+
+
+References:
+
+1. Allen Kei, October 16,2017. R Tutorial 13: Variable Selection and Best Subsets Selection (regsubsets)
+URL: https://www.youtube.com/watch?v=HkpECgfs_Pk
+
+2. The Investopedia Team, February 11, 2022. R-Squared Vs Adjusted R-Squared. What's the Difference?
+URL: https://www.investopedia.com/ask/answers/012615/whats-difference-between-rsquared-and-adjusted-rsquared.asp#:~:text=Many%20investors%20prefer%20adjusted%20R,the%20stock%20index%20is%20measured.
+
+3. Jacob Long, January 12, 2022. Tools for summarizing and visualizing regression models.
+URL: https://cran.r-project.org/web/packages/jtools/vignettes/summ.html
+
+4. Dr.Bharatendra Rai, January 11, 2016. Multicollinearity with R.
+URL: https://www.youtube.com/watch?v=I4z3yjoEADY
+
+5. RVStats Consulting, July 19,2022. Detect and Eliminate Multicollineearity in Multiple Linear Regression in R RStudio Tutorial Data.
+URL: https://www.youtube.com/watch?v=vGWTqhqLVfc
+
+6. MarinStatsLectures-R Programming & Statistics, November 22, 2013. Multiple Linear Regression in R | R Tutorial 5.3 | MarinStatsLectures.
+URL: https://www.youtube.com/watch?v=q1RD5ECsSB0
+
+7. Jim Frost. Choosing the Correct Type of Regression Analysis.
+URL: https://statisticsbyjim.com/regression/choosing-regression-analysis/
